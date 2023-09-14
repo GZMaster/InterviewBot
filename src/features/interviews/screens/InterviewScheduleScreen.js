@@ -11,6 +11,27 @@ const InterviewScheduleContainer = styled.View`
   flex: 1;
   align-items: flex-start;
   justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  space-between: ${(props) => props.theme.space[3]};
+  padding: ${(props) => props.theme.space[3]};
+`;
+
+const Container = styled.View`
+  flex: 1;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: auto;
+  flex-shrink: 0;
+`;
+
+const ViewContainer = styled.View`
+  flex: 1;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 23.375rem;
+  height: 13.1875rem;
+  flex-shrink: 0;
   padding: ${(props) => props.theme.space[3]};
 `;
 
@@ -23,7 +44,13 @@ export const InterviewScheduleScreen = () => {
             All your assessments at a glance
           </Text>
 
-          <Search />s
+          <Search />
+
+          <ViewContainer>
+            <Text variant="label" size="large">
+              Upcoming assessments
+            </Text>
+          </ViewContainer>
         </Spacer>
       </InterviewScheduleContainer>
     </SafeArea>
