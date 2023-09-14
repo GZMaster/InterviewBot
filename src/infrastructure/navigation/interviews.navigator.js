@@ -19,10 +19,10 @@ export const InterviesNavigator = () => {
         name="InterviewSchedule"
         component={InterviewScheduleScreen}
       />
-      <InterviewStack.Screen
+      {/* <InterviewStack.Screen
         name="InterviewChat"
         component={InterviewChatScreen}
-      />
+      /> */}
     </InterviewStack.Navigator>
   );
 };

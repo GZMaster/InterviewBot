@@ -1,21 +1,16 @@
-import { Navigation } from "./src/infrastructure/navigation";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ThemeProvider } from "styled-components/native";
+import { theme } from "./src/infrastructure/theme";
+import { Navigation } from "./src/infrastructure/navigation";
+import "react-native-gesture-handler";
 
 export default function App() {
   return (
     <>
-      <Navigation />
-      <StatusBar style="auto" />
+      <ThemeProvider theme={theme}>
+        <Navigation />
+        <StatusBar style="auto" />
+      </ThemeProvider>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

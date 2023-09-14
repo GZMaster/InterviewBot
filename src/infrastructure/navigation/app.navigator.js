@@ -1,5 +1,8 @@
 import React from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { InterviesNavigator } from "./interviews.navigator";
+
+const Drawer = createDrawerNavigator();
 
 export const AppNavigator = () => {
   return (
