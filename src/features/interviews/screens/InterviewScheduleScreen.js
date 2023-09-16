@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import { Button } from "react-native";
 
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
@@ -35,24 +36,27 @@ const ViewContainer = styled.View`
   padding: ${(props) => props.theme.space[3]};
 `;
 
-export const InterviewScheduleScreen = () => {
+export const InterviewScheduleScreen = ({ navigation }) => {
   return (
-    <SafeArea>
-      <InterviewScheduleContainer>
-        <Spacer size="large">
+    <InterviewScheduleContainer>
+      <Spacer size="large">
+        <Text variant="label" size="large">
+          All your assessments at a glance
+        </Text>
+
+        <Search />
+
+        <ViewContainer>
           <Text variant="label" size="large">
-            All your assessments at a glance
+            Upcoming assessments
           </Text>
+        </ViewContainer>
 
-          <Search />
-
-          <ViewContainer>
-            <Text variant="label" size="large">
-              Upcoming assessments
-            </Text>
-          </ViewContainer>
-        </Spacer>
-      </InterviewScheduleContainer>
-    </SafeArea>
+        <Button
+          title="Go to Interview Chat"
+          onPress={() => navigation.navigate("InterviewChat")}
+        />
+      </Spacer>
+    </InterviewScheduleContainer>
   );
 };

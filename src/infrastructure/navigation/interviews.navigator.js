@@ -5,7 +5,7 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import { InterviewScheduleScreen } from "../../features/interviews/screens/InterviewScheduleScreen";
-// import { InterviewChatScreen } from "../../features/interviews/screens/InterviewChatScreen";
+import { InterviewChatScreen } from "../../features/interviews/screens/InterviewChatScreen";
 
 const InterviewStack = createStackNavigator();
 
@@ -19,10 +19,10 @@ export const InterviesNavigator = () => {
         name="InterviewSchedule"
         component={InterviewScheduleScreen}
       />
-      {/* <InterviewStack.Screen
+      <InterviewStack.Screen
         name="InterviewChat"
         component={InterviewChatScreen}
-      /> */}
+      />
     </InterviewStack.Navigator>
   );
 };
