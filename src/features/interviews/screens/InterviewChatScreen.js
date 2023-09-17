@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { ScrollView, Image, Button } from "react-native";
+import { Audio } from "expo-av";
+import * as Speech from "expo-speech";
 
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
@@ -28,6 +30,57 @@ const CenterImage = styled.Image`
 `;
 
 export const InterviewChatScreen = ({ navigation }) => {
+  const speak = (text) => {
+    Speech.speak(text);
+  };
+
+  const [recording, setRecording] = useState();
+
+  async function startRecording() {
+    try {
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
+      );
+      await recording.startAsync();
+      setRecording(recording);
+    } catch (err) {
+      console.error("Failed to start recording", err);
+    }
+  }
+
+  async function stopRecording() {
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+
+    // Use Expo's FileSystem API to read the audio file as binary data
+    const audioData = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    // Send the audio data to your backend
+    fetch("YOUR_BACKEND_ENDPOINT_URL/upload", {
+      method: "POST",
+      body: JSON.stringify({ data: audioData }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Server response:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   return (
     <InterviewChatContainer>
       <BackButton
@@ -47,11 +100,10 @@ export const InterviewChatScreen = ({ navigation }) => {
 
       <Spacer position="bottom" size="large">
         <Button
-          title="Submit"
-          onPress={() => {
-            /* Add action code here */
-          }}
+          title={recording ? "Stop Recording" : "Start Recording"}
+          onPress={recording ? stopRecording : startRecording}
         />
+        {/* Display the transcription here */}
       </Spacer>
     </InterviewChatContainer>
   );

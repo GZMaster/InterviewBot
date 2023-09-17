@@ -10,20 +10,12 @@ import { Search } from "../components/search.component";
 
 const InterviewScheduleContainer = styled.View`
   flex: 1;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
   space-between: ${(props) => props.theme.space[3]};
   padding: ${(props) => props.theme.space[3]};
-`;
-
-const Container = styled.View`
-  flex: 1;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: auto;
-  flex-shrink: 0;
 `;
 
 const ViewContainer = styled.View`
@@ -39,19 +31,21 @@ const ViewContainer = styled.View`
 export const InterviewScheduleScreen = ({ navigation }) => {
   return (
     <InterviewScheduleContainer>
-      <Spacer size="large">
+      <Spacer position="top" size="large">
         <Text variant="label" size="large">
           All your assessments at a glance
         </Text>
+      </Spacer>
 
-        <Search />
+      <Search />
 
-        <ViewContainer>
-          <Text variant="label" size="large">
-            Upcoming assessments
-          </Text>
-        </ViewContainer>
+      <ViewContainer>
+        <Text variant="label" size="large">
+          Upcoming assessments
+        </Text>
+      </ViewContainer>
 
+      <Spacer position="bottom" size="large">
         <Button
           title="Go to Interview Chat"
           onPress={() => navigation.navigate("InterviewChat")}
