@@ -2,7 +2,6 @@
 import React, { createContext, useState, useContext } from "react";
 import { register, login, logout } from "./authentication.service";
 import { getToken, saveToken, removeToken } from "./token.service";
-import { resume } from "expo-speech";
 
 const AuthenticationContext = createContext();
 
@@ -39,6 +38,18 @@ export const AuthenticationProvider = ({ children }) => {
     }
   };
 
+  const signOut = async () => {
+    const token = await getToken();
+
+    const response = await signOut(token);
+
+    if (response) {
+      setIsAuthenticated(false);
+      setUser(null);
+      removeToken();
+    }
+  };
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -48,6 +59,8 @@ export const AuthenticationProvider = ({ children }) => {
         setIsAuthenticated,
         setUser,
         setToken,
+        authenticate,
+        signup,
       }}
     >
       {children}

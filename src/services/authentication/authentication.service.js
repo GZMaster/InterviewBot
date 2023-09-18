@@ -35,4 +35,20 @@ export const register = async (userData) => {
   }
 };
 
-export const logout = async (token) => {};
+export const logout = async (token) => {
+  try {
+    const response = await fetch("http://localhost:8000/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    }
+    throw new Error(data.message);
+  } catch (error) {
+    throw error;
+  }
+};
