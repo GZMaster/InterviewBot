@@ -64,12 +64,16 @@ export const InterviewChatScreen = ({ navigation }) => {
       encoding: FileSystem.EncodingType.Base64,
     });
 
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTAzNzU3NCwiZXhwIjoxNjk1MTIzOTc0fQ.om08FPfDGDhDAQwc4JqycohpwdfsvM7fxhBU7z0MvRI";
+
     // Send the audio data to your backend
-    fetch("YOUR_BACKEND_ENDPOINT_URL/upload", {
+    fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendMessage", {
       method: "POST",
       body: JSON.stringify({ data: audioData }),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
