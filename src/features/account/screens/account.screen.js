@@ -8,10 +8,17 @@ import {
   Title,
   AnimationWrapper,
 } from "../components/account.styles";
+import styled from "styled-components/native";
+
+const Container = styled.View`
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: ${(props) => props.theme.space[4]};
+  margin-top: ${(props) => props.theme.space[2]};
+`;
 
 export const AccountScreen = ({ navigation }) => {
   return (
-    <AccountBackground>
+    <Container>
       <AccountCover />
       {/* <AnimationWrapper>
         <LottieView
@@ -41,6 +48,6 @@ export const AccountScreen = ({ navigation }) => {
           </AuthButton>
         </Spacer>
       </AccountContainer>
-    </AccountBackground>
+    </Container>
   );
 };

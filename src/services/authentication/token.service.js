@@ -1,10 +1,10 @@
-import SecureStorage from "@react-native-community/secure-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TOKEN_KEY = "AUTH_TOKEN";
 
 export const saveToken = async (token) => {
   try {
-    await SecureStorage.setItem(TOKEN_KEY, token);
+    await AsyncStorage.setItem(TOKEN_KEY, token);
   } catch (error) {
     console.error("Error saving token", error);
   }
@@ -12,7 +12,7 @@ export const saveToken = async (token) => {
 
 export const getToken = async () => {
   try {
-    return await SecureStorage.getItem(TOKEN_KEY);
+    return await AsyncStorage.getItem(TOKEN_KEY);
   } catch (error) {
     console.error("Error getting token", error);
     return null;
@@ -21,7 +21,7 @@ export const getToken = async () => {
 
 export const removeToken = async () => {
   try {
-    await SecureStorage.removeItem(TOKEN_KEY);
+    await AsyncStorage.removeItem(TOKEN_KEY);
   } catch (error) {
     console.error("Error removing token", error);
   }

@@ -3,14 +3,14 @@ import { Button, TextInput } from "react-native-paper";
 import { Text } from "../../../components/typography/text.component";
 import { colors } from "../../../infrastructure/theme/colors";
 
-export const AccountBackground = styled.ImageBackground.attrs({
-  source: require("../../../../assets/home_bg.jpg"),
-})`
-  flex: 1;
-  background-color: #ddd
-  align-items: center;
-  justify-content: center;
-`;
+// export const AccountBackground = styled.ImageBackground.attrs({
+//   source: require(""),
+// })`
+//   flex: 1;
+//   background-color: #ddd
+//   align-items: center;
+//   justify-content: center;
+// `;
 
 export const AccountCover = styled.View`
   position: absolute;

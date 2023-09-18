@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import { AuthenticationContext } from "../../services/authentication/authentication.context";
+import { AuthenticationProvider } from "../../services/authentication/authentication.context";
 import { AppNavigator } from "./app.navigator";
 import { AccountNavigator } from "./account.navigator";
 import { NavigationContainer } from "@react-navigation/native";
 
 export const Navigation = () => {
-  const { isAuthenticated } = useContext(AuthenticationContext);
+  // const { isAuthenticated } = useContext(AuthenticationProvider);
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <AppNavigator /> : <AccountNavigator />}
+      {/* {isAuthenticated ? <AppNavigator /> : <AccountNavigator />} */}
 
       <AppNavigator />
     </NavigationContainer>

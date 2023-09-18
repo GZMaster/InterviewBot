@@ -2,11 +2,14 @@
 
 export const login = async (username, password) => {
   try {
-    const response = await fetch("http://localhost:8000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    const response = await fetch(
+      "https://interview-server.cyclic.cloud/api/v1/users/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      },
+    );
     const data = await response.json();
 
     if (response.ok) {
@@ -20,11 +23,14 @@ export const login = async (username, password) => {
 
 export const register = async (userData) => {
   try {
-    const response = await fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
+    const response = await fetch(
+      "https://interview-server.cyclic.cloud/api/v1/users/signup",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      },
+    );
     const data = await response.json();
     if (response.ok) {
       return data;
@@ -37,10 +43,13 @@ export const register = async (userData) => {
 
 export const logout = async (token) => {
   try {
-    const response = await fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "https://interview-server.cyclic.cloud/api/v1/users/logout",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
 
     const data = await response.json();
 

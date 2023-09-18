@@ -41,7 +41,7 @@ export const AuthenticationProvider = ({ children }) => {
   const signOut = async () => {
     const token = await getToken();
 
-    const response = await signOut(token);
+    const response = await logout(token);
 
     if (response) {
       setIsAuthenticated(false);
@@ -61,6 +61,7 @@ export const AuthenticationProvider = ({ children }) => {
         setToken,
         authenticate,
         signup,
+        signOut,
       }}
     >
       {children}
