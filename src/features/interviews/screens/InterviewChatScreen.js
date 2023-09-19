@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Animated, Easing } from "react-native";
 import styled from "styled-components/native";
 import { ScrollView, Image, Button } from "react-native";
 import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
+import LottieView from "lottie-react-native";
 
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
+import { animationJson } from "../../../components/animation/animated_character.json";
 
 const InterviewChatContainer = styled.View`
   flex: 1;
@@ -53,8 +56,25 @@ const SendButton = styled.TouchableOpacity`
   border-radius: 5px;
 `;
 
+const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
+  const [replyText, setReplyText] = useState("");
+  const animationProgress = useRef(new Animated.Value(0));
+
+  useEffect(() => {
+    speak(replyText);
+  }, [replyText]);
+
+  useEffect(() => {
+    Animated.timing(animationProgress.current, {
+      toValue: 1,
+      duration: 5000,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   const speak = (text) => {
     Speech.speak(text);
@@ -76,20 +96,20 @@ export const InterviewChatScreen = ({ navigation }) => {
         },
         body: JSON.stringify({
           text: messageText,
-          roomId: "650842c3a796f5c9b11735e7", // Replace with the current room's ID
+          roomId: "650842c3a796f5c9b11735e7",
         }),
-      });
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Server response:", data);
 
-      const responseJson = await response.json();
+          setReplyText(data.data.botResponse.reply);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
 
-      if (responseJson.status === "success") {
-        // Handle successful message sending, e.g., clear the text input
-        setMessageText("");
-        // ... any other logic you'd like to implement upon successful sending
-      } else {
-        // Handle errors, e.g., display an error message to the user
-        console.error("Error sending message:", responseJson.message);
-      }
+      setMessageText("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -166,11 +186,15 @@ export const InterviewChatScreen = ({ navigation }) => {
         }}
       />
 
-      <CenterImage source={{ uri: "YOUR_IMAGE_URL" }} />
-
       <ChatArea>
+        <AnimatedLottieView
+          source={require("../../../../assets/animated_character.json")}
+          progress={animationProgress.current}
+        />
+
         {/* Add your chat messages here */}
-        <Text>Sample chat message</Text>
+
+        <Text>{replyText}</Text>
 
         <MessageInput
           value={messageText}
@@ -180,13 +204,6 @@ export const InterviewChatScreen = ({ navigation }) => {
 
         {/* ... */}
       </ChatArea>
-
-      <Button
-        title="Speak"
-        onPress={() => {
-          speak("Hello, I am Interview Bot. How can I help you?");
-        }}
-      />
 
       <Spacer position="bottom" size="large">
         {/* <Button
