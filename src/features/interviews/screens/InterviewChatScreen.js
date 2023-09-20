@@ -7,74 +7,20 @@ import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
 import LottieView from "lottie-react-native";
 
-import { SafeArea } from "../../../components/utility/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
-import { animationJson } from "../../../components/animation/animated_character.json";
-
-const InterviewChatContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${(props) => props.theme.space[3]};
-`;
-
-const BackButton = styled.Button`
-  align-self: flex-start;
-`;
-
-const ChatArea = styled(ScrollView)`
-  width: 100%;
-  flex: 1;
-`;
-
-const CenterImage = styled.Image`
-  width: 100px;
-  height: 100px;
-`;
-
-const MessageInput = styled.TextInput`
-  width: 80%;
-  height: 40px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 20px;
-`;
-
-const SendButton = styled.TouchableOpacity`
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 5px;
-`;
-
-const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
   const [replyText, setReplyText] = useState("");
-  const animationProgress = useRef(new Animated.Value(0));
+
+  const animationRef = useRef(null);
 
   useEffect(() => {
+    animationRef.current?.play(30, 120);
+
     speak(replyText);
   }, [replyText]);
-
-  useEffect(() => {
-    Animated.timing(animationProgress.current, {
-      toValue: 1,
-      duration: 5000,
-      easing: Easing.linear,
-      useNativeDriver: false,
-    }).start();
-  }, []);
 
   const speak = (text) => {
     Speech.speak(text);
@@ -85,7 +31,7 @@ export const InterviewChatScreen = ({ navigation }) => {
   const sendTextMessage = async () => {
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTAzNzU3NCwiZXhwIjoxNjk1MTIzOTc0fQ.om08FPfDGDhDAQwc4JqycohpwdfsvM7fxhBU7z0MvRI";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTE5NzY2MywiZXhwIjoxNjk1Mjg0MDYzfQ.7mo8BGPeIiONfwni4E284onzdBSeXNnNQn5xBzjAW-g";
 
       // Send the audio data to your backend
       fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
@@ -186,12 +132,18 @@ export const InterviewChatScreen = ({ navigation }) => {
         }}
       />
 
-      <ChatArea>
-        <AnimatedLottieView
-          source={require("../../../../assets/animated_character.json")}
-          progress={animationProgress.current}
-        />
+      <LottieView
+        autoPlay
+        loop
+        ref={animationRef}
+        style={{
+          width: 200,
+          height: 200,
+        }}
+        source={require("../../../assets/animation_lmrhkiqg.json")}
+      />
 
+      <ChatArea>
         {/* Add your chat messages here */}
 
         <Text>{replyText}</Text>
@@ -220,3 +172,47 @@ export const InterviewChatScreen = ({ navigation }) => {
     </InterviewChatContainer>
   );
 };
+
+const InterviewChatContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${(props) => props.theme.space[3]};
+`;
+
+const BackButton = styled.Button`
+  align-self: flex-start;
+`;
+
+const ChatArea = styled(ScrollView)`
+  width: 100%;
+  flex: 1;
+`;
+
+const CenterImage = styled.Image`
+  width: 100px;
+  height: 100px;
+`;
+
+const MessageInput = styled.TextInput`
+  width: 80%;
+  height: 40px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+`;
+
+const SendButton = styled.TouchableOpacity`
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+`;
