@@ -3,20 +3,24 @@ import React, { createContext, useState, useContext } from "react";
 import { register, login, logout } from "./authentication.service";
 import { getToken, saveToken, removeToken } from "./token.service";
 
-const AuthenticationContext = createContext();
+export const AuthenticationContext = createContext();
 
 export const AuthenticationProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [error, setError] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const authenticate = async (username, password) => {
-    const response = await login(username, password);
+  const authenticate = async (matno, password) => {
+    const response = await login(matno, password);
 
-    if (response.token) {
+    console.log(response.data.token);
+
+    if (response.data.token) {
       setIsAuthenticated(true);
-      setUser(response.user);
-      saveToken(response.token);
+      setUser(response.data.user);
+      saveToken(response.data.token);
     }
   };
 
@@ -62,13 +66,11 @@ export const AuthenticationProvider = ({ children }) => {
         authenticate,
         signup,
         signOut,
+        error,
+        isLoading,
       }}
     >
       {children}
     </AuthenticationContext.Provider>
   );
-};
-
-export const useAuthentication = () => {
-  return useContext(AuthenticationContext);
 };
