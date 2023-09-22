@@ -11,7 +11,7 @@ import {
   Title,
   ErrorContainer,
 } from "../components/account.styles";
-import { useAuthentication } from "../../../services/authentication/authentication.context";
+import { AuthenticationContext } from "../../../services/authentication/authentication.context";
 
 export const SignupScreen = ({}) => {
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ export const SignupScreen = ({}) => {
   const [matno, setMatNo] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPssword, setRepeadedPassword] = useState("");
-  const { signup } = useContext(useAuthentication);
+  const { signup, error, isLoading } = useContext(AuthenticationContext);
 
   return (
     <AccountBackground>

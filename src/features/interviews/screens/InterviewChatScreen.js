@@ -6,7 +6,7 @@ import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
 import LottieView from "lottie-react-native";
-
+import { getToken } from "../../../services/authentication/token.service";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
 
@@ -30,8 +30,7 @@ export const InterviewChatScreen = ({ navigation }) => {
 
   const sendTextMessage = async () => {
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTE5NzY2MywiZXhwIjoxNjk1Mjg0MDYzfQ.7mo8BGPeIiONfwni4E284onzdBSeXNnNQn5xBzjAW-g";
+      const token = await getToken();
 
       // Send the audio data to your backend
       fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
@@ -100,7 +99,7 @@ export const InterviewChatScreen = ({ navigation }) => {
     });
 
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTAzNzU3NCwiZXhwIjoxNjk1MTIzOTc0fQ.om08FPfDGDhDAQwc4JqycohpwdfsvM7fxhBU7z0MvRI";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDgzODAzMmJmYzY1MGUzNTg0ZWU4YyIsImlhdCI6MTY5NTM0NzE2NywiZXhwIjoxNjk1NDMzNTY3fQ.y4YRGEYd0unbuqOjndBsjFmDfjdDEN0TYLcGHR55EoA";
 
     // Send the audio data to your backend
     fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendMessage", {

@@ -1,34 +1,38 @@
 import React, { useState, useContext } from "react";
-import { Text } from "../../../components/typography/text.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import {
-  AccountBackground,
   AccountCover,
   LoginContainer,
   AuthButton,
   AuthTextInput,
   Title,
-  ErrorContainer,
 } from "../components/account.styles";
-import { useAuthentication } from "../../../services/authentication/authentication.context";
+import styled from "styled-components/native";
+import { AuthenticationContext } from "../../../services/authentication/authentication.context";
+
+const Container = styled.View`
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: ${(props) => props.theme.space[4]};
+  margin-top: ${(props) => props.theme.space[2]};
+`;
 
 export const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+  const [matno, setMatNo] = useState("");
   const [password, setPassword] = useState("");
-  const { authenticate } = useContext(useAuthentication);
+  const { authenticate } = useContext(AuthenticationContext);
 
   return (
-    <AccountBackground>
+    <Container>
       <AccountCover />
-      <Title>Meals To Go</Title>
+      <Title>Interview Login</Title>
       <LoginContainer>
         <AuthTextInput
-          label="Email"
-          value={email}
-          textContentType="emailAddress"
-          keyboardType="email-address"
+          label="Matric Number"
+          value={matno}
+          textContentType="matno"
+          keyboardType="mat-number"
           autoCapitalize="none"
-          onChangeText={(u) => setEmail(u)}
+          onChangeText={(u) => setMatNo(u)}
         />
         <Spacer size="large">
           <AuthTextInput
@@ -40,23 +44,14 @@ export const LoginScreen = ({ navigation }) => {
             onChangeText={(p) => setPassword(p)}
           />
         </Spacer>
-        {error && (
-          <ErrorContainer size="large">
-            <Text variant="error">{error}</Text>
-          </ErrorContainer>
-        )}
         <Spacer size="large">
-          {!isLoading ? (
-            <AuthButton
-              icon="lock-open-outline"
-              mode="contained"
-              onPress={() => authenticate(email, password)}
-            >
-              Login
-            </AuthButton>
-          ) : (
-            <ActivityIndicator animating={true} color={Colors.blue300} />
-          )}
+          <AuthButton
+            icon="lock-open-outline"
+            mode="contained"
+            onPress={() => authenticate(matno, password)}
+          >
+            Login
+          </AuthButton>
         </Spacer>
       </LoginContainer>
       <Spacer size="large">
@@ -64,6 +59,6 @@ export const LoginScreen = ({ navigation }) => {
           Back
         </AuthButton>
       </Spacer>
-    </AccountBackground>
+    </Container>
   );
 };

@@ -1,13 +1,13 @@
 // authentication.service.js
 
-export const login = async (username, password) => {
+export const login = async (matno, password) => {
   try {
     const response = await fetch(
       "https://interview-server.cyclic.cloud/api/v1/users/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ matno: matno, password }),
       },
     );
     const data = await response.json();
@@ -15,6 +15,7 @@ export const login = async (username, password) => {
     if (response.ok) {
       return data;
     }
+    
     throw new Error(data.message);
   } catch (error) {
     throw error;
