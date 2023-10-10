@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Animated, Easing } from "react-native";
+import { Animated, Easing, ScrollView, Image, Button } from "react-native";
 import styled from "styled-components/native";
-import { ScrollView, Image, Button } from "react-native";
 import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
@@ -131,7 +130,7 @@ export const InterviewChatScreen = ({ navigation }) => {
         }}
       />
 
-      <LottieView
+      {/* <LottieView
         autoPlay
         loop
         ref={animationRef}
@@ -139,7 +138,12 @@ export const InterviewChatScreen = ({ navigation }) => {
           width: 200,
           height: 200,
         }}
-        source={require("../../../assets/animation_lmrhkiqg.json")}
+        source={require("../../../assets/animated_character.json")}
+      /> */}
+
+      <Image
+        source={require("../../../assets/Ai_Avatar.jpg")}
+        style={{ width: 200, height: 200 }}
       />
 
       <ChatArea>
