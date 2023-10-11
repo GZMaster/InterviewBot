@@ -38,7 +38,7 @@ export const AccountScreen = ({ navigation }) => {
         >
           Login
         </AuthButton>
-        {/* <Spacer size="large">
+        <Spacer size="large">
           <AuthButton
             icon="account-circle-outline"
             mode="contained"
@@ -46,7 +46,7 @@ export const AccountScreen = ({ navigation }) => {
           >
             Sign Up
           </AuthButton>
-        </Spacer> */}
+        </Spacer>
       </AccountContainer>
     </Container>
   );

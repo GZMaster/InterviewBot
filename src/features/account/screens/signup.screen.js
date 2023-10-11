@@ -17,6 +17,7 @@ export const SignupScreen = ({}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [matno, setMatNo] = useState("");
+  const [department, setDepartment] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPssword, setRepeadedPassword] = useState("");
   const { signup, error, isLoading } = useContext(AuthenticationContext);
@@ -50,6 +51,14 @@ export const SignupScreen = ({}) => {
           autoCapitalize="none"
           onChangeText={(u) => setMatNo(u)}
         />
+        <AuthTextInput
+          label="Department"
+          value={department}
+          textContentType="department"
+          keyboardType="department"
+          autoCapitalize="none"
+          onChangeText={(u) => setDepartment(u)}
+        />
         <Spacer size="large">
           <AuthTextInput
             label="Password"
@@ -81,7 +90,14 @@ export const SignupScreen = ({}) => {
               icon="email-outline"
               mode="contained"
               onPress={() =>
-                signup(name, email, matno, password, repeatedPssword)
+                signup({
+                  name,
+                  email,
+                  matno,
+                  department,
+                  password,
+                  repeatedPssword,
+                })
               }
             >
               Register
