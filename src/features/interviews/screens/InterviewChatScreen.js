@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
-import LottieView from "lottie-react-native";
 import { getToken } from "../../../services/authentication/token.service";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";

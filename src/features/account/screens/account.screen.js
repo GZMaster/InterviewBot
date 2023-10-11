@@ -1,24 +1,19 @@
 import React from "react";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import {
-  AccountBackground,
+  AccountScreenContainer,
   AccountCover,
   AccountContainer,
   AuthButton,
   Title,
+  Body,
   AnimationWrapper,
 } from "../components/account.styles";
 import styled from "styled-components/native";
 
-const Container = styled.View`
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: ${(props) => props.theme.space[4]};
-  margin-top: ${(props) => props.theme.space[2]};
-`;
-
 export const AccountScreen = ({ navigation }) => {
   return (
-    <Container>
+    <AccountScreenContainer>
       <AccountCover />
       {/* <AnimationWrapper>
         <LottieView
@@ -29,7 +24,10 @@ export const AccountScreen = ({ navigation }) => {
           source={require("../../../../assets/watermelon.json")}
         />
       </AnimationWrapper> */}
-      <Title>Interview Bot</Title>
+
+      <Title>Get evaluated with more ease.</Title>
+      <Body>Simplified assessments for enhanced student experience.</Body>
+
       <AccountContainer>
         <AuthButton
           icon="account-circle-outline"
@@ -48,6 +46,6 @@ export const AccountScreen = ({ navigation }) => {
           </AuthButton>
         </Spacer>
       </AccountContainer>
-    </Container>
+    </AccountScreenContainer>
   );
 };
