@@ -4,8 +4,9 @@ import { Text } from "../../../components/typography/text.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import {
   AccountBackground,
+  AccountScreenContainer,
   AccountCover,
-  LoginContainer,
+  RegisterContainer,
   AuthButton,
   AuthTextInput,
   Title,
@@ -13,44 +14,61 @@ import {
 } from "../components/account.styles";
 import { AuthenticationContext } from "../../../services/authentication/authentication.context";
 
-export const SignupScreen = ({}) => {
+export const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [matno, setMatNo] = useState("");
+  const [department, setDepartment] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPssword, setRepeadedPassword] = useState("");
   const { signup, error, isLoading } = useContext(AuthenticationContext);
 
   return (
-    <AccountBackground>
+    <AccountScreenContainer>
       <AccountCover />
-      <Title>Meals To Go</Title>
-      <LoginContainer>
-        <AuthTextInput
-          label="Name"
-          value={name}
-          textContentType="name"
-          keyboardType="name"
-          autoCapitalize="none"
-          onChangeText={(u) => setName(u)}
-        />
-        <AuthTextInput
-          label="Email"
-          value={email}
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          onChangeText={(u) => setEmail(u)}
-        />
-        <AuthTextInput
-          label="MatNo"
-          value={matno}
-          textContentType="matno"
-          keyboardType="matno"
-          autoCapitalize="none"
-          onChangeText={(u) => setMatNo(u)}
-        />
-        <Spacer size="large">
+      <Title>Create an account and get evaluated</Title>
+      <RegisterContainer>
+        <Spacer size="small">
+          <AuthTextInput
+            label="Name"
+            value={name}
+            textContentType="name"
+            keyboardType="name"
+            autoCapitalize="none"
+            onChangeText={(u) => setName(u)}
+          />
+        </Spacer>
+        <Spacer size="small">
+          <AuthTextInput
+            label="Uniben Email Address"
+            value={email}
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            onChangeText={(u) => setEmail(u)}
+          />
+        </Spacer>
+        <Spacer size="small">
+          <AuthTextInput
+            label="Matriculation Number"
+            value={matno}
+            textContentType="Matriculation Number"
+            keyboardType="Matriculation Number"
+            autoCapitalize="none"
+            onChangeText={(u) => setMatNo(u)}
+          />
+        </Spacer>
+        <Spacer size="small">
+          <AuthTextInput
+            label="Department"
+            value={department}
+            textContentType="department"
+            keyboardType="department"
+            autoCapitalize="none"
+            onChangeText={(u) => setDepartment(u)}
+          />
+        </Spacer>
+        <Spacer size="small">
           <AuthTextInput
             label="Password"
             value={password}
@@ -60,7 +78,7 @@ export const SignupScreen = ({}) => {
             onChangeText={(p) => setPassword(p)}
           />
         </Spacer>
-        <Spacer size="large">
+        <Spacer size="small">
           <AuthTextInput
             label="Repeat Password"
             value={repeatedPssword}
@@ -81,7 +99,14 @@ export const SignupScreen = ({}) => {
               icon="email-outline"
               mode="contained"
               onPress={() =>
-                signup(name, email, matno, password, repeatedPssword)
+                signup(
+                  name,
+                  email,
+                  matno,
+                  department,
+                  password,
+                  repeatedPssword,
+                ).then(() => navigation.navigate("Login"))
               }
             >
               Register
@@ -90,12 +115,12 @@ export const SignupScreen = ({}) => {
             <ActivityIndicator animating={true} color={Colors.blue300} />
           )}
         </Spacer>
-      </LoginContainer>
+      </RegisterContainer>
       <Spacer size="large">
         <AuthButton mode="contained" onPress={() => navigation.goBack()}>
           Back
         </AuthButton>
       </Spacer>
-    </AccountBackground>
+    </AccountScreenContainer>
   );
 };

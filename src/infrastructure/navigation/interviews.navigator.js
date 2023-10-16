@@ -1,7 +1,6 @@
 import React from "react";
 import {
   createStackNavigator,
-  TransitionPreset,
   TransitionPresets,
 } from "@react-navigation/stack";
 import { InterviewScheduleScreen } from "../../features/interviews/screens/InterviewScheduleScreen";

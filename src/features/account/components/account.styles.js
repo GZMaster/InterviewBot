@@ -7,10 +7,17 @@ import { colors } from "../../../infrastructure/theme/colors";
 //   source: require(""),
 // })`
 //   flex: 1;
-//   background-color: #ddd
+//   background-color: #ddd;
 //   align-items: center;
 //   justify-content: center;
 // `;
+
+export const AccountScreenContainer = styled.View`
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.3);
+  align-items: center;
+  justify-content: center;
+`;
 
 export const AccountCover = styled.View`
   position: absolute;
@@ -21,6 +28,7 @@ export const AccountCover = styled.View`
 
 export const AccountContainer = styled.View`
   background-color: rgba(255, 255, 255, 0.3);
+  width: 100%;
   padding: ${(props) => props.theme.space[4]};
   margin-top: ${(props) => props.theme.space[2]};
 `;
@@ -32,16 +40,41 @@ export const LoginContainer = styled.View`
   margin-top: ${(props) => props.theme.space[2]};
 `;
 
+export const RegisterContainer = styled.View`
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: ${(props) => props.theme.space[3]};
+  margin-top: ${(props) => props.theme.space[2]};
+`;
+
 export const AuthButton = styled(Button).attrs({
   color: colors.brand.primary,
 })`
   padding: ${(props) => props.theme.space[2]};
+  border-radius: ${(props) => props.theme.space[2]};
+  background: #3083dc;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const AuthTextInput = styled(TextInput).attrs({})``;
 
 export const Title = styled(Text)`
-  font-size: 30px;
+  color: var(--Black, #333);
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+`;
+
+export const Body = styled(Text)`
+  color: #808080;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
 `;
 
 export const ErrorContainer = styled.View`
