@@ -15,7 +15,6 @@ import {
   CenterImage,
 } from "../components/Interview.styles";
 import { IconButton, MD3Colors } from "react-native-paper";
-import { set } from "mongoose";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
