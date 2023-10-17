@@ -15,14 +15,22 @@ import {
   CenterImage,
 } from "../components/Interview.styles";
 import { IconButton, MD3Colors } from "react-native-paper";
+import { set } from "mongoose";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
   const [replyText, setReplyText] = useState("");
+  const [numberOfMessages, setNumberOfMessages] = useState(0);
 
   useEffect(() => {
     speak(replyText);
   }, [replyText]);
+
+  useEffect(() => {
+    if (numberOfMessages >= 10) {
+      getScore();
+    }
+  }, [numberOfMessages]);
 
   const speak = (text) => {
     Speech.speak(text);
@@ -55,6 +63,38 @@ export const InterviewChatScreen = ({ navigation }) => {
         });
 
       setMessageText("");
+      setNumberOfMessages(numberOfMessages + 1);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const getScore = async () => {
+    try {
+      const token = await getToken();
+
+      fetch("https://interview-server.cyclic.cloud/api/v1/chats/getScore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          roomId: "650842c3a796f5c9b11735e7",
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Server response:", data);
+
+          setReplyText(data.data.botResponse.reply);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+      setMessageText("");
+      setNumberOfMessages(numberOfMessages + 1);
     } catch (error) {
       console.error("Error sending message:", error);
     }
