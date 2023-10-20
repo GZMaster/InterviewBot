@@ -115,23 +115,12 @@ export const InterviewChatScreen = ({ navigation }) => {
         />
       </ChatNavigationContainer>
 
-      {/* <LottieView
-        autoPlay
-        loop
-        ref={animationRef}
-        style={{
-          width: 200,
-          height: 200,
-        }}
-        source={require("../../../assets/animated_character.json")}
-      /> */}
-
-      <CenterImage
-        source={require("../../../assets/man.png")}
-        style={{ width: 200, height: 200 }}
-      />
-
       <ChatArea>
+        <CenterImage
+          source={require("../../../assets/man.png")}
+          style={{ width: 200, height: 200 }}
+        />
+
         <ReplyMessage>{replyText}</ReplyMessage>
 
         <MessageInput
