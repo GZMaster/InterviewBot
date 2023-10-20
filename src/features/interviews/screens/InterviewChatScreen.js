@@ -26,8 +26,12 @@ export const InterviewChatScreen = ({ navigation }) => {
   }, [replyText]);
 
   useEffect(() => {
-    if (numberOfMessages >= 10) {
-      getScore();
+    if (numberOfMessages === 10) {
+      getScore().then(() => {
+        setTimeout(() => {
+          navigation.goBack();
+        }, 5000);
+      });
     }
   }, [numberOfMessages]);
 
@@ -39,7 +43,6 @@ export const InterviewChatScreen = ({ navigation }) => {
     try {
       const token = await getToken();
 
-      // Send the audio data to your backend
       fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
         method: "POST",
         headers: {
@@ -56,13 +59,13 @@ export const InterviewChatScreen = ({ navigation }) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.botResponse.reply);
+          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
 
       setMessageText("");
-      setNumberOfMessages(numberOfMessages + 1);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -86,14 +89,13 @@ export const InterviewChatScreen = ({ navigation }) => {
         .then((data) => {
           console.log("Server response:", data);
 
-          setReplyText(data.data.botResponse.reply);
+          setReplyText(data.data.score);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
 
       setMessageText("");
-      setNumberOfMessages(numberOfMessages + 1);
     } catch (error) {
       console.error("Error sending message:", error);
     }
