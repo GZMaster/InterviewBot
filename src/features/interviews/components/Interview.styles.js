@@ -22,7 +22,7 @@ export const InterviewScheduleContainer = styled.View`
 
 export const ViewContainer = styled.View`
   flex: 1;
-  align-items: flex-start;
+  align-items: left;
   justify-content: flex-start;
   width: 23.375rem;
   height: 13.1875rem;
@@ -39,9 +39,13 @@ export const Title = styled(Text)`
 
 export const InterviewText = styled(Text)`
   color: #aeaeae;
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: left;
 `;
 
 export const InterviewButton = styled(Button).attrs({

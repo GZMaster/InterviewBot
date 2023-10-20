@@ -30,7 +30,7 @@ export const InterviewChatScreen = ({ navigation }) => {
       getScore().then(() => {
         setTimeout(() => {
           navigation.goBack();
-        }, 5000);
+        }, 10000);
       });
     }
   }, [numberOfMessages]);
@@ -90,6 +90,7 @@ export const InterviewChatScreen = ({ navigation }) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.score);
+          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
