@@ -15,7 +15,6 @@ import {
   CenterImage,
 } from "../components/Interview.styles";
 import { IconButton, MD3Colors } from "react-native-paper";
-import { set } from "mongoose";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
@@ -27,8 +26,12 @@ export const InterviewChatScreen = ({ navigation }) => {
   }, [replyText]);
 
   useEffect(() => {
-    if (numberOfMessages >= 10) {
-      getScore();
+    if (numberOfMessages === 10) {
+      getScore().then(() => {
+        setTimeout(() => {
+          navigation.goBack();
+        }, 10000);
+      });
     }
   }, [numberOfMessages]);
 
@@ -40,7 +43,6 @@ export const InterviewChatScreen = ({ navigation }) => {
     try {
       const token = await getToken();
 
-      // Send the audio data to your backend
       fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
         method: "POST",
         headers: {
@@ -57,13 +59,13 @@ export const InterviewChatScreen = ({ navigation }) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.botResponse.reply);
+          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
 
       setMessageText("");
-      setNumberOfMessages(numberOfMessages + 1);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -87,14 +89,14 @@ export const InterviewChatScreen = ({ navigation }) => {
         .then((data) => {
           console.log("Server response:", data);
 
-          setReplyText(data.data.botResponse.reply);
+          setReplyText(data.data.score);
+          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
 
       setMessageText("");
-      setNumberOfMessages(numberOfMessages + 1);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -113,23 +115,12 @@ export const InterviewChatScreen = ({ navigation }) => {
         />
       </ChatNavigationContainer>
 
-      {/* <LottieView
-        autoPlay
-        loop
-        ref={animationRef}
-        style={{
-          width: 200,
-          height: 200,
-        }}
-        source={require("../../../assets/animated_character.json")}
-      /> */}
-
-      <CenterImage
-        source={require("../../../assets/man.png")}
-        style={{ width: 200, height: 200 }}
-      />
-
       <ChatArea>
+        <CenterImage
+          source={require("../../../assets/man.png")}
+          style={{ width: 200, height: 200 }}
+        />
+
         <ReplyMessage>{replyText}</ReplyMessage>
 
         <MessageInput
