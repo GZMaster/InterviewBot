@@ -14,16 +14,25 @@ import {
   SendButton,
   CenterImage,
 } from "../components/Interview.styles";
+import Image from "../components/Image.component";
 import { IconButton, MD3Colors } from "react-native-paper";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
   const [replyText, setReplyText] = useState("");
   const [numberOfMessages, setNumberOfMessages] = useState(0);
+  const [resetAnimation, setResetAnimation] = useState(false);
 
   useEffect(() => {
     speak(replyText);
+  
+    // Cleanup function
+    return () => {
+      // Stop the animation when the component unmounts or when replyText changes
+      setResetAnimation(false);
+    };
   }, [replyText]);
+  
 
   useEffect(() => {
     if (numberOfMessages === 10) {
@@ -36,8 +45,22 @@ export const InterviewChatScreen = ({ navigation }) => {
   }, [numberOfMessages]);
 
   const speak = (text) => {
-    Speech.speak(text);
+    // Start speaking
+    Speech.speak(text, {
+      onDone: () => {
+        // Animation should stop when speech is done
+        setResetAnimation(false);
+      },
+      onStopped: () => {
+        // Animation should stop when speech is stopped
+        setResetAnimation(false);
+      },
+    });
+  
+    // Animation should start when speech begins
+    setResetAnimation(true);
   };
+  
 
   const sendTextMessage = async () => {
     try {
@@ -116,10 +139,12 @@ export const InterviewChatScreen = ({ navigation }) => {
       </ChatNavigationContainer>
 
       <ChatArea>
-        <CenterImage
+        {/* <CenterImage
           source={require("../../../assets/man.png")}
           style={{ width: 200, height: 200 }}
-        />
+        /> */}
+
+        <Image resetAnimation={resetAnimation} />
 
         <ReplyMessage>{replyText}</ReplyMessage>
 
