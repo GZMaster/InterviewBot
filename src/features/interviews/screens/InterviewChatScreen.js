@@ -31,7 +31,7 @@ export const InterviewChatScreen = ({ navigation }) => {
   
 
   useEffect(() => {
-    if (numberOfMessages === 10) {
+    if (numberOfMessages === 5) {
       getScore().then(() => {
         setTimeout(() => {
           navigation.goBack();
