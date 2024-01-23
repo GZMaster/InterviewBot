@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
-import * as FileSystem from "expo-file-system";
 import { getToken } from "../../../services/authentication/token.service";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
 import {
   InterviewChatContainer,
-  ChatNavigationContainer,
+  CenterImage,
   ChatArea,
   ReplyMessage,
   MessageInput,
   SendButton,
-  CenterImage,
 } from "../components/Interview.styles";
 import Image from "../components/Image.component";
-import { IconButton, MD3Colors } from "react-native-paper";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
@@ -127,23 +123,8 @@ export const InterviewChatScreen = ({ navigation }) => {
 
   return (
     <InterviewChatContainer>
-      <ChatNavigationContainer>
-        <IconButton
-          icon="arrow-left"
-          iconColor={MD3Colors.white}
-          size={20}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      </ChatNavigationContainer>
 
       <ChatArea>
-        {/* <CenterImage
-          source={require("../../../assets/man.png")}
-          style={{ width: 200, height: 200 }}
-        /> */}
-
         <Image resetAnimation={resetAnimation} />
 
         <ReplyMessage>{replyText}</ReplyMessage>

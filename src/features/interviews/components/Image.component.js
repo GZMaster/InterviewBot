@@ -24,7 +24,7 @@ export default Image = ({ resetAnimation }) => {
     <AnimatedLottieView
       source={require('../../../assets/animation_lmrhkiqg.json')}
       progress={animationProgress.current}
-      style={{ width: 200, height: 200 }}
+      style={{ width: 300, height: 300, alignItems: 'center' }}
     />
   );
 };
