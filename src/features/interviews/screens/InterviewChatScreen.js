@@ -18,6 +18,9 @@ export const InterviewChatScreen = ({ navigation }) => {
   const [replyText, setReplyText] = useState("");
   const [numberOfMessages, setNumberOfMessages] = useState(0);
   const [resetAnimation, setResetAnimation] = useState(false);
+  const [completed, setCompleted] = useState(false)
+
+  let maxQuestionNo = 5
 
   useEffect(() => {
     speak(replyText);
@@ -30,14 +33,10 @@ export const InterviewChatScreen = ({ navigation }) => {
   }, [replyText]);
 
   useEffect(() => {
-    if (numberOfMessages > 5 && !resetAnimation) {
-      getScore().then(() => {
-        setTimeout(() => {
-          navigation.goBack();
-        }, 10000);
-      });
+    if (completed) {
+      getScore()
     }
-  }, [numberOfMessages]);
+  }, [completed]);
 
   const speak = (text) => {
     // Start speaking
@@ -60,7 +59,7 @@ export const InterviewChatScreen = ({ navigation }) => {
     try {
       const token = await getToken();
 
-      await fetch(
+      const response = await fetch(
         "https://interview-server.cyclic.cloud/api/v1/chats/sendText",
         {
           method: "POST",
@@ -79,7 +78,11 @@ export const InterviewChatScreen = ({ navigation }) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.botResponse.reply);
-          setNumberOfMessages(numberOfMessages + 1);
+          if (numberOfMessages < maxQuestionNo) {
+            setNumberOfMessages(numberOfMessages + 1);
+          } else if (numberOfMessages === maxQuestionNo) {
+            setCompleted(true)
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -92,6 +95,8 @@ export const InterviewChatScreen = ({ navigation }) => {
   };
 
   const getScore = async () => {
+    setReplyText("");
+
     try {
       const token = await getToken();
 
@@ -113,7 +118,6 @@ export const InterviewChatScreen = ({ navigation }) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.score);
-          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -125,6 +129,10 @@ export const InterviewChatScreen = ({ navigation }) => {
     }
   };
 
+  const completeInterview = () => {
+    navigation.goBack();
+  };
+
   return (
     <InterviewChatContainer>
       <ChatArea>
@@ -132,8 +140,8 @@ export const InterviewChatScreen = ({ navigation }) => {
 
         <ReplyMessage>{replyText}</ReplyMessage>
       </ChatArea>
-      
-      {numberOfMessages <= 5 ? (
+
+      {!completed ? (
         <>
           <MessageInput
             value={messageText}
@@ -156,7 +164,7 @@ export const InterviewChatScreen = ({ navigation }) => {
       )}
 
       <Text style={{ textAlign: "center", marginTop: 10 }}>
-        Questions Asked: {numberOfMessages} / 5
+        Questions Asked: {numberOfMessages} / {maxQuestionNo}
       </Text>
     </InterviewChatContainer>
   );
