@@ -21,17 +21,16 @@ export const InterviewChatScreen = ({ navigation }) => {
 
   useEffect(() => {
     speak(replyText);
-  
+
     // Cleanup function
     return () => {
       // Stop the animation when the component unmounts or when replyText changes
       setResetAnimation(false);
     };
   }, [replyText]);
-  
 
   useEffect(() => {
-    if (numberOfMessages === 5) {
+    if (numberOfMessages > 5 && !resetAnimation) {
       getScore().then(() => {
         setTimeout(() => {
           navigation.goBack();
@@ -52,27 +51,29 @@ export const InterviewChatScreen = ({ navigation }) => {
         setResetAnimation(false);
       },
     });
-  
+
     // Animation should start when speech begins
     setResetAnimation(true);
   };
-  
 
   const sendTextMessage = async () => {
     try {
       const token = await getToken();
 
-      fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      await fetch(
+        "https://interview-server.cyclic.cloud/api/v1/chats/sendText",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: messageText,
+            roomId: "650842c3a796f5c9b11735e7",
+          }),
         },
-        body: JSON.stringify({
-          text: messageText,
-          roomId: "650842c3a796f5c9b11735e7",
-        }),
-      })
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("Server response:", data);
@@ -94,16 +95,19 @@ export const InterviewChatScreen = ({ navigation }) => {
     try {
       const token = await getToken();
 
-      fetch("https://interview-server.cyclic.cloud/api/v1/chats/getScore", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      await fetch(
+        "https://interview-server.cyclic.cloud/api/v1/chats/getScore",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            roomId: "650842c3a796f5c9b11735e7",
+          }),
         },
-        body: JSON.stringify({
-          roomId: "650842c3a796f5c9b11735e7",
-        }),
-      })
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("Server response:", data);
@@ -123,24 +127,37 @@ export const InterviewChatScreen = ({ navigation }) => {
 
   return (
     <InterviewChatContainer>
-
       <ChatArea>
-        <Image resetAnimation={resetAnimation} />
+        <Image startAnimation={resetAnimation} />
 
         <ReplyMessage>{replyText}</ReplyMessage>
-
-        <MessageInput
-          value={messageText}
-          onChangeText={(text) => setMessageText(text)}
-          placeholder="Type your message..."
-        />
       </ChatArea>
+      
+      {numberOfMessages <= 5 ? (
+        <>
+          <MessageInput
+            value={messageText}
+            onChangeText={(text) => setMessageText(text)}
+            placeholder="Type your message..."
+          />
 
-      <Spacer position="bottom" size="large">
-        <SendButton onPress={sendTextMessage}>
-          <Text>Send</Text>
-        </SendButton>
-      </Spacer>
+          <Spacer position="bottom" size="large">
+            <SendButton onPress={sendTextMessage}>
+              <Text>Send</Text>
+            </SendButton>
+          </Spacer>
+        </>
+      ) : (
+        <Spacer position="bottom" size="large">
+          <SendButton onPress={completeInterview}>
+            <Text>Complete</Text>
+          </SendButton>
+        </Spacer>
+      )}
+
+      <Text style={{ textAlign: "center", marginTop: 10 }}>
+        Questions Asked: {numberOfMessages} / 5
+      </Text>
     </InterviewChatContainer>
   );
 };
