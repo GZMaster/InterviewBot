@@ -12,13 +12,14 @@ import {
   SendButton,
 } from "../components/Interview.styles";
 import Image from "../components/Image.component";
+import SpeechToText from "../components/SpeechToText.component";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
   const [replyText, setReplyText] = useState("");
   const [numberOfMessages, setNumberOfMessages] = useState(0);
   const [resetAnimation, setResetAnimation] = useState(false);
-  const [completed, setCompleted] = useState(false)
+  const [completed, setCompleted] = useState(false);
 
   let maxQuestionNo = 5
 
@@ -133,6 +134,12 @@ export const InterviewChatScreen = ({ navigation }) => {
     navigation.goBack();
   };
 
+  const handleResult = (text) => {
+    console.log('Speech recognition result:', text);
+
+    // setMessageText(text)
+  };
+
   return (
     <InterviewChatContainer>
       <ChatArea>
@@ -153,6 +160,8 @@ export const InterviewChatScreen = ({ navigation }) => {
             <SendButton onPress={sendTextMessage}>
               <Text>Send</Text>
             </SendButton>
+
+            <SpeechToText onResult={handleResult} />
           </Spacer>
         </>
       ) : (
