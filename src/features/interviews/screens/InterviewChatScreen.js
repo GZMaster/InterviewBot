@@ -1,65 +1,89 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Audio } from "expo-av";
 import * as Speech from "expo-speech";
-import * as FileSystem from "expo-file-system";
 import { getToken } from "../../../services/authentication/token.service";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
 import {
   InterviewChatContainer,
-  ChatNavigationContainer,
+  CenterImage,
   ChatArea,
   ReplyMessage,
   MessageInput,
   SendButton,
-  CenterImage,
 } from "../components/Interview.styles";
-import { IconButton, MD3Colors } from "react-native-paper";
+import Image from "../components/Image.component";
+import SpeechToText from "../components/SpeechToText.component";
 
 export const InterviewChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
   const [replyText, setReplyText] = useState("");
   const [numberOfMessages, setNumberOfMessages] = useState(0);
+  const [resetAnimation, setResetAnimation] = useState(false);
+  const [completed, setCompleted] = useState(false);
+
+  let maxQuestionNo = 5
 
   useEffect(() => {
     speak(replyText);
+
+    // Cleanup function
+    return () => {
+      // Stop the animation when the component unmounts or when replyText changes
+      setResetAnimation(false);
+    };
   }, [replyText]);
 
   useEffect(() => {
-    if (numberOfMessages === 10) {
-      getScore().then(() => {
-        setTimeout(() => {
-          navigation.goBack();
-        }, 10000);
-      });
+    if (completed) {
+      getScore()
     }
-  }, [numberOfMessages]);
+  }, [completed]);
 
   const speak = (text) => {
-    Speech.speak(text);
+    // Start speaking
+    Speech.speak(text, {
+      onDone: () => {
+        // Animation should stop when speech is done
+        setResetAnimation(false);
+      },
+      onStopped: () => {
+        // Animation should stop when speech is stopped
+        setResetAnimation(false);
+      },
+    });
+
+    // Animation should start when speech begins
+    setResetAnimation(true);
   };
 
   const sendTextMessage = async () => {
     try {
       const token = await getToken();
 
-      fetch("https://interview-server.cyclic.cloud/api/v1/chats/sendText", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "https://interview-server.cyclic.cloud/api/v1/chats/sendText",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: messageText,
+            roomId: "650842c3a796f5c9b11735e7",
+          }),
         },
-        body: JSON.stringify({
-          text: messageText,
-          roomId: "650842c3a796f5c9b11735e7",
-        }),
-      })
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.botResponse.reply);
-          setNumberOfMessages(numberOfMessages + 1);
+          if (numberOfMessages < maxQuestionNo) {
+            setNumberOfMessages(numberOfMessages + 1);
+          } else if (numberOfMessages === maxQuestionNo) {
+            setCompleted(true)
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -72,25 +96,29 @@ export const InterviewChatScreen = ({ navigation }) => {
   };
 
   const getScore = async () => {
+    setReplyText("");
+
     try {
       const token = await getToken();
 
-      fetch("https://interview-server.cyclic.cloud/api/v1/chats/getScore", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      await fetch(
+        "https://interview-server.cyclic.cloud/api/v1/chats/getScore",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            roomId: "650842c3a796f5c9b11735e7",
+          }),
         },
-        body: JSON.stringify({
-          roomId: "650842c3a796f5c9b11735e7",
-        }),
-      })
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("Server response:", data);
 
           setReplyText(data.data.score);
-          setNumberOfMessages(numberOfMessages + 1);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -102,39 +130,51 @@ export const InterviewChatScreen = ({ navigation }) => {
     }
   };
 
+  const completeInterview = () => {
+    navigation.goBack();
+  };
+
+  const handleResult = (text) => {
+    console.log('Speech recognition result:', text);
+
+    // setMessageText(text)
+  };
+
   return (
     <InterviewChatContainer>
-      <ChatNavigationContainer>
-        <IconButton
-          icon="arrow-left"
-          iconColor={MD3Colors.white}
-          size={20}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      </ChatNavigationContainer>
-
       <ChatArea>
-        <CenterImage
-          source={require("../../../assets/man.png")}
-          style={{ width: 200, height: 200 }}
-        />
+        <Image startAnimation={resetAnimation} />
 
         <ReplyMessage>{replyText}</ReplyMessage>
-
-        <MessageInput
-          value={messageText}
-          onChangeText={(text) => setMessageText(text)}
-          placeholder="Type your message..."
-        />
       </ChatArea>
 
-      <Spacer position="bottom" size="large">
-        <SendButton onPress={sendTextMessage}>
-          <Text>Send</Text>
-        </SendButton>
-      </Spacer>
+      {!completed ? (
+        <>
+          <MessageInput
+            value={messageText}
+            onChangeText={(text) => setMessageText(text)}
+            placeholder="Type your message..."
+          />
+
+          <Spacer position="bottom" size="large">
+            <SendButton onPress={sendTextMessage}>
+              <Text>Send</Text>
+            </SendButton>
+
+            <SpeechToText onResult={handleResult} />
+          </Spacer>
+        </>
+      ) : (
+        <Spacer position="bottom" size="large">
+          <SendButton onPress={completeInterview}>
+            <Text>Complete</Text>
+          </SendButton>
+        </Spacer>
+      )}
+
+      <Text style={{ textAlign: "center", marginTop: 10 }}>
+        Questions Asked: {numberOfMessages} / {maxQuestionNo}
+      </Text>
     </InterviewChatContainer>
   );
 };

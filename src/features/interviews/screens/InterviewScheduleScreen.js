@@ -49,7 +49,7 @@ export const InterviewScheduleScreen = ({ navigation }) => {
       <ViewContainer>
         {/* <InterviewText>Upcoming assessments</InterviewText> */}
         {interviews.map((interview) => (
-          <Spacer position="bottom" size="large" key={interview.id}>
+          <Spacer position="bottom" size="large" key={interview._id}>
             <InterviewText onPress={() => navigation.navigate("InterviewChat")}>
               {interview.chatRoomName}
             </InterviewText>
