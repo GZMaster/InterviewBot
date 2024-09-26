@@ -28,6 +28,8 @@ export const InterviewContextProvider = ({ children }) => {
       });
   }, []);
 
+  // this is a context object
+
   const interviewsContext = {
     interviews,
     isLoading,
